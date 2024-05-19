@@ -26,18 +26,21 @@ def load_fashion_model():
 
 def import_and_predict(image_data, model):
     size = (28, 28)
-    image = ImageOps.grayscale(ImageOps.fit(image_data, size, Image.ANTIALIAS))
+    # Convert image to grayscale and resize
+    image = ImageOps.grayscale(ImageOps.fit(image_data, size, Image.Resampling.LANCZOS))
     img = np.asarray(image)
-    img = img / 255.0
-    img_reshape = img[np.newaxis, ..., np.newaxis]
+    img = img / 255.0  # Normalize
+    img_reshape = img[np.newaxis, ..., np.newaxis]  # Add batch and channel dimensions
     prediction = model.predict(img_reshape)
     return prediction
 
+# Load the model once
 model = load_fashion_model()
 if model is None:
     st.stop()
 
-st.write("# Fashion Dataset by Espiritu_Castillo")
+# Streamlit UI
+st.write("# Fashion Dataset by Espiritu_Santos")
 file = st.file_uploader("Choose a photo from your computer", type=["jpg", "png"])
 
 if file is None:
@@ -46,6 +49,7 @@ else:
     image = Image.open(file)
     st.image(image, use_column_width=True)
 
+    # Perform prediction
     prediction = import_and_predict(image, model)
 
     class_names = ['T-shirt', 'Top', 'Pullover', 'Dress', 'Coat', 'Sandal', 'Shirt', 'Sneaker', 'Bag', 'Ankle Boot']
