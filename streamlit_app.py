@@ -65,10 +65,10 @@ if model is None:
     st.stop()
 
 # Streamlit UI Design
-st.title("🧥 Fashion Item Classifier")
+st.title("🧥 Fashion Dataset by Espiritu_Castillo")
 st.write(
     """
-    Fashion Dataset by Espiritu_Castillo
+    Welcome to the Fashion Item Classifier! 
     Upload an image of a fashion item, and the model will predict what type of item it is.
     """
 )
