@@ -55,7 +55,7 @@ if model is None:
     st.stop()
 
 # Streamlit UI
-st.write("# Fashion Dataset by Espiritu_Santos")
+st.write("# Fashion Dataset by Espiritu_Castillo")
 file = st.file_uploader("Choose a photo from your computer", type=["jpg", "png"])
 
 if file is None:
