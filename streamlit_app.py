@@ -45,19 +45,27 @@ def load_fashion_model():
     if not os.path.exists(model_path):
         st.error(f"Model file not found: {model_path}")
         return None
-    model = tf.keras.models.load_model(model_path)
-    return model
+    try:
+        model = tf.keras.models.load_model(model_path)
+        return model
+    except Exception as e:
+        st.error(f"Error loading model: {e}")
+        return None
 
 # Function to preprocess the image and make predictions
 def import_and_predict(image_data, model):
-    size = (28, 28)
-    # Convert image to grayscale and resize
-    image = ImageOps.grayscale(ImageOps.fit(image_data, size, Image.Resampling.LANCZOS))
-    img = np.asarray(image)
-    img = img / 255.0  # Normalize
-    img_reshape = img[np.newaxis, ..., np.newaxis]  # Add batch and channel dimensions
-    prediction = model.predict(img_reshape)
-    return prediction
+    try:
+        size = (28, 28)
+        # Convert image to grayscale and resize
+        image = ImageOps.grayscale(ImageOps.fit(image_data, size, Image.Resampling.LANCZOS))
+        img = np.asarray(image)
+        img = img / 255.0  # Normalize
+        img_reshape = img[np.newaxis, ..., np.newaxis]  # Add batch and channel dimensions
+        prediction = model.predict(img_reshape)
+        return prediction
+    except Exception as e:
+        st.error(f"Error processing image: {e}")
+        return None
 
 # Load the model once
 model = load_fashion_model()
@@ -93,14 +101,15 @@ else:
     # Perform prediction
     prediction = import_and_predict(image, model)
 
-    class_names = ['T-shirt/top', 'Trouser', 'Pullover', 'Dress', 'Coat', 'Sandal', 'Shirt', 'Sneaker', 'Bag', 'Ankle Boot']
-    result_class = np.argmax(prediction)
-    result_label = class_names[result_class]
-    confidence = prediction[0][result_class]
+    if prediction is not None:
+        class_names = ['T-shirt/top', 'Trouser', 'Pullover', 'Dress', 'Coat', 'Sandal', 'Shirt', 'Sneaker', 'Bag', 'Ankle Boot']
+        result_class = np.argmax(prediction)
+        result_label = class_names[result_class]
+        confidence = prediction[0][result_class]
 
-    st.write("## Prediction Result")
-    st.write(f"**Item:** {result_label}")
-    st.write(f"**Confidence:** {confidence:.2%}")
+        st.write("## Prediction Result")
+        st.write(f"**Item:** {result_label}")
+        st.write(f"**Confidence:** {confidence:.2%}")
 
-    st.balloons()  # Add some celebratory balloons when a prediction is made
+        st.balloons()  # Add some celebratory balloons when a prediction is made
 
