@@ -68,7 +68,7 @@ if model is None:
 st.title("🧥 Fashion Item Classifier")
 st.write(
     """
-    Welcome to the Fashion Item Classifier! 
+    Fashion Dataset by Espiritu_Castillo
     Upload an image of a fashion item, and the model will predict what type of item it is.
     """
 )
