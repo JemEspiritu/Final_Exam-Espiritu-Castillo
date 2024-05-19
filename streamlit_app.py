@@ -30,6 +30,14 @@ from tensorflow.keras.preprocessing.image import img_to_array
 from keras.models import load_model
 import os
 
+# Page configuration must be set before any Streamlit commands
+st.set_page_config(
+    page_title="Fashion Classifier",
+    page_icon="👗",
+    layout="centered",
+    initial_sidebar_state="expanded",
+)
+
 # Function to load the model
 @st.cache_resource
 def load_fashion_model():
@@ -57,13 +65,6 @@ if model is None:
     st.stop()
 
 # Streamlit UI Design
-st.set_page_config(
-    page_title="Fashion Classifier",
-    page_icon="👗",
-    layout="centered",
-    initial_sidebar_state="expanded",
-)
-
 st.title("🧥 Fashion Item Classifier")
 st.write(
     """
@@ -102,3 +103,4 @@ else:
     st.write(f"**Confidence:** {confidence:.2%}")
 
     st.balloons()  # Add some celebratory balloons when a prediction is made
+
