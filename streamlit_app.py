@@ -22,8 +22,6 @@ Code Title: | Emerging Technologies in CpE 2
 <hr>
 """
 
-! pip install streamlit -q
-
 import streamlit as st
 import tensorflow as tf
 import numpy as np
