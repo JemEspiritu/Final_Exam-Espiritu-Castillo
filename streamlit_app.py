@@ -13,26 +13,30 @@ import numpy as np
 from PIL import Image, ImageOps
 from tensorflow.keras.preprocessing.image import img_to_array
 from keras.models import load_model
+import os
 
 @st.cache_resource
 def load_fashion_model():
-    model = tf.keras.models.load_model('saved_fashion.h5')
+    model_path = 'saved_fashion.h5'
+    if not os.path.exists(model_path):
+        st.error(f"Model file not found: {model_path}")
+        return None
+    model = tf.keras.models.load_model(model_path)
     return model
 
 def import_and_predict(image_data, model):
     size = (28, 28)
-    # Convert image to grayscale and resize
     image = ImageOps.grayscale(ImageOps.fit(image_data, size, Image.ANTIALIAS))
     img = np.asarray(image)
-    img = img / 255.0  # Normalize
-    img_reshape = img[np.newaxis, ..., np.newaxis]  # Add batch and channel dimensions
+    img = img / 255.0
+    img_reshape = img[np.newaxis, ..., np.newaxis]
     prediction = model.predict(img_reshape)
     return prediction
 
-# Load the model once
 model = load_fashion_model()
+if model is None:
+    st.stop()
 
-# Streamlit UI
 st.write("# Fashion Dataset by Espiritu_Santos")
 file = st.file_uploader("Choose a photo from your computer", type=["jpg", "png"])
 
@@ -42,7 +46,6 @@ else:
     image = Image.open(file)
     st.image(image, use_column_width=True)
 
-    # Perform prediction
     prediction = import_and_predict(image, model)
 
     class_names = ['T-shirt', 'Top', 'Pullover', 'Dress', 'Coat', 'Sandal', 'Shirt', 'Sneaker', 'Bag', 'Ankle Boot']
